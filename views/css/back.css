@@ -571,7 +571,7 @@ ul.menu-widgets li.active div.content{
   text-align: center;
   color: #576c72;
   padding-right: 10px;
-  max-width: 170px;
+  max-width: 240px;
   cursor: pointer;
 }
 .trash-button.disabled{

@@ -17,8 +17,8 @@
       <label for="">{l s='Target' mod='seoprestamenu'}</label>
       <br>
       <select name="target" class="form-control">
-        <option value="_self" {if isset($item->target) && $item->target == '_self'} selected {/if} >{l s='In the current tab'}</option>
-        <option value="_blank" {if isset($item->target) && $item->target == '_blank'} selected {/if} >{l s='In other tab'}</option>
+        <option value="_self" {if isset($item->target) && $item->target == '_self'} selected {/if} >{l s='In the current tab' mod='seoprestamenu'}</option>
+        <option value="_blank" {if isset($item->target) && $item->target == '_blank'} selected {/if} >{l s='In other tab' mod='seoprestamenu'}</option>
       </select>
     </div>
     {if $helperMenu->menu_model->getChilden($item->id,$id_lang)|count > 0}

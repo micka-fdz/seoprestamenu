@@ -110,8 +110,8 @@
 								<div class="form-group">
 									<label for="">{l s='Target' mod='seoprestamenu'}</label>
 									<select name="target">
-										<option value="_self">{l s='In the current tab'}</option>
-										<option value="_blank">{l s='In other tab'}</option>
+										<option value="_self">{l s='In the current tab' mod='seoprestamenu'}</option>
+										<option value="_blank">{l s='In other tab' mod='seoprestamenu'}</option>
 									</select>
 								</div>
 
@@ -149,8 +149,8 @@
 									<div class="form-group">
 										<label for="">{l s='Target' mod='seoprestamenu'}</label>
 										<select name="target">
-											<option value="_self">{l s='In the current tab'}</option>
-											<option value="_blank">{l s='In other tab'}</option>
+											<option value="_self">{l s='In the current tab' mod='seoprestamenu'}</option>
+											<option value="_blank">{l s='In other tab' mod='seoprestamenu'}</option>
 										</select>
 									</div>
 
