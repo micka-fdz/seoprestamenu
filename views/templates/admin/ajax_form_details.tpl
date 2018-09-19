@@ -12,6 +12,7 @@
       <label for="">{l s='Url' mod='seoprestamenu'}</label>
       <input type="text" class="form-control" name="url" value="{if isset($item->url[$id_lang])}{$item->url[$id_lang]}{/if}">
     </div>
+    {$item|dump}
 
     <div class="form-group sweet-modal-prompt">
       <label for="">{l s='Target' mod='seoprestamenu'}</label>
@@ -28,6 +29,7 @@
       <input type="checkbox" class="form-control" name="display_sections" {if isset($item->display_sections[$id_lang]) && $item->display_sections[$id_lang]} checked {/if}value="1">
     </div>
     {/if}
+
 
     
     {hook h='displayAjaxFormMenu'}

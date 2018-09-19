@@ -42,13 +42,22 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
                     $cl  = new Category($cat, $l['id_lang']);
                     $module->menu_model->label[$l['id_lang']]   = $cl->name;
                     $module->menu_model->url[$l['id_lang']]     = $link->getCategoryLink($cl,null,(int)$l['id_lang']);
+                    if(Tools::getIsset('id_shop'))
+                    {
+                        $id_shop = (int)Tools::getValue('id_shop');
+                        $module->menu_model->id_shop = $id_shop;
+                    }
                 }
                
             } else {
                 $module->menu_model->label[$module->current_lang]   = $c->name;
                 $module->menu_model->url[$module->current_lang]     = $c->getLink();
+                if(Tools::getIsset('id_shop'))
+                {
+                    $id_shop = (int)Tools::getValue('id_shop');
+                    $module->menu_model->id_shop     = $id_shop;
+                }
             }
-
             $module->menu_model->add();
             $mapping[$c->id_category] = $module->menu_model->id;
 
@@ -81,16 +90,26 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
             $module->menu_model->id_parent  = 0;
 
             $link = new Link;
+            $langs = Language::getLanguages();
             if (sizeof($langs) > 1) {
                 foreach ($langs as $l) {
                     $cl  = new CMS($cms, $l['id_lang']);
-
                     $module->menu_model->label[$l['id_lang']]   = $cl->meta_title;
                     $module->menu_model->url[$l['id_lang']]     = $link->getCMSLink($cl);
+                    if(Tools::getIsset('id_shop'))
+                    {
+                        $id_shop = (int)Tools::getValue('id_shop');
+                        $module->menu_model->id_shop = $id_shop;
+                    }
                 }
             } else {
                 $module->menu_model->label[$module->current_lang]   = $c->meta_title;
                 $module->menu_model->url[$module->current_lang]     = $link->getCMSLink($c);
+                if(Tools::getIsset('id_shop'))
+                {
+                    $id_shop = (int)Tools::getValue('id_shop');
+                    $module->menu_model->id_shop = $id_shop;
+                }
             }
 
             $module->menu_model->add();
@@ -123,10 +142,15 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
         $module->menu_model->id_parent  = 0;
 
 
-
+        $langs = Language::getLanguages();
         foreach ($langs as $l) {
             $module->menu_model->label[$l['id_lang']]   = $label;
             $module->menu_model->url[$l['id_lang']]     = $link;
+            if(Tools::getIsset('id_shop'))
+            {
+                $id_shop = (int)Tools::getValue('id_shop');
+                $module->menu_model->id_shop = $id_shop;
+            }
         }
 
 
@@ -201,7 +225,7 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
         $module->menu_model->id_parent  = 0;
 
 
-
+        $langs = Language::getLanguages();
         foreach ($langs as $l) {
             $module->menu_model->label[$l['id_lang']]   = $label;
             $module->menu_model->url[$l['id_lang']]     = $link;
@@ -235,16 +259,19 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
 
     if ($action == 'updateMenu') {
         $id_lang = (Tools::getIsset('id_lang')) ? ((int)Tools::getValue('id_lang')) : $module->current_lang;
+        $id_shop = (Tools::getIsset('id_shop')) ? (int)Tools::getValue('id_shop') : 1;
         $menu_formated = $module->menu_model->getPositions($_POST['menu'], $array = array(), $parent = 0, $position = 1);
         echo $module->menu_model->updatePositions($menu_formated);
-
+        
         die();
     }
     ### reloadMenu
-
+    
     if ($action == 'reloadMenu') {
         $id_lang = (Tools::getIsset('id_lang')) ? ((int)Tools::getValue('id_lang')) : $module->current_lang;
-        echo $module->getMenu($id_lang);
+        $id_shop = (Tools::getIsset('id_shop')) ? (int)Tools::getValue('id_shop') : 1;
+        echo $module->getMenu($id_lang, $id_shop);
+
         die();
     }
     if ($action == 'removeItem') {
@@ -305,7 +332,11 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
         // }
         $id_item  = (int)Tools::getValue('id');
         $id_lang  = (int)Tools::getValue('id_lang');
-        $item     = new $module->menu_model($id_item);
+        $id_shop    = (Tools::getIsset('id_shop')) ? (int)Tools::getValue('id_shop') : 1;
+        // echo json_encode($id_shop);
+        // die();
+       
+        $item     = new $module->menu_model($id_item,false, null, $id_shop);
         // $langs    = $langs;
         $lang   = new Language($id_lang);
     

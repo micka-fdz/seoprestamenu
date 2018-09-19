@@ -179,6 +179,7 @@ class Seoprestamenu extends Module implements WidgetInterface
         $this->context->smarty->assign('menu', $this->getMenu());
         $this->context->smarty->assign('categoriesTree', $this->getCategoryTree(null, $this->current_lang));
         $this->context->smarty->assign('cmsPages', $this->getCMSPages());
+        $this->context->smarty->assign('current_shop', $this->context->shop->id);
 
 
         $output = $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl');
@@ -344,7 +345,7 @@ class Seoprestamenu extends Module implements WidgetInterface
      */
     public function getCMSPages()
     {
-        return CMS::getCMSPages($this->current_lang);
+        return CMS::getCMSPages($this->current_lang, null, true, $this->context->shop->id);
     }
 
 

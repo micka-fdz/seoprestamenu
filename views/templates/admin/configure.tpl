@@ -35,7 +35,7 @@
 	var cancel_removed=	"{l s='Operation canceled' mod='seoprestamenu'}";
 	var success_menu_updated=	"{l s='Menu updated' mod='seoprestamenu'}";
 	var success_add_item=	"{l s='Item added' mod='seoprestamenu'}";
-	console.log(delete_message);
+	var current_shop = "{$current_shop}";
 </script>
 
 <div class="panel">
@@ -52,6 +52,7 @@
 							<form class="" id="formListCategoriesTree" action="{$module_dir|escape:'htmlall':'UTF-8'}ajax.php" method="post">
 
 								<input type="hidden" name="action" value="sendItemMenu">
+								<input type="hidden" name="id_shop" value="{$current_shop}">
 								<input type="hidden" name="token" value="{$helperMenu->token}">
 								{$categoriesTree}
 								<br>
@@ -69,6 +70,7 @@
 							<form class="" id="formListCMSPages" action="{$module_dir|escape:'htmlall':'UTF-8'}ajax.php" method="post">
 
 								<input type="hidden" name="action" value="sendCmsPageMenu">
+								<input type="hidden" name="id_shop" value="{$current_shop}">
 								<input type="hidden" name="token" value="{$helperMenu->token}">
 								{foreach from=$cmsPages item=cms}
 									<span class="custom-checkbox">
@@ -92,6 +94,7 @@
 							<form class="" id="formCustomLink" action="{$module_dir|escape:'htmlall':'UTF-8'}ajax.php" method="post">
 
 								<input type="hidden" name="action" value="sendCustomLink">
+								<input type="hidden" name="id_shop" value="{$current_shop}">
 								<input type="hidden" name="token" value="{$helperMenu->token}">
 
 								<!-- custom link -->
@@ -127,6 +130,7 @@
 
 							<form id="ajax_search_product" method="POST" action="{$module_dir|escape:'htmlall':'UTF-8'}ajax.php">
 								<input type="hidden" name="action" value="addProductMenu">
+								<input type="hidden" name="id_shop" value="{$current_shop}">
 								<input type="hidden" name="token" value="{$helperMenu->token|escape:'htmlall':'UTF-8'}">
 								<input type="hidden" name="id_product" id="id_product" value="0">
 								<div class="form-group">

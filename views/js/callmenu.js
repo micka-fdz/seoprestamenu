@@ -92,9 +92,9 @@ $(document).on('submit', '#ajax_update_item', function (e) {
 $(document).on('click', ".dd-item span.button-edit", function () {
 	var id = $(this).attr('data-owner-id');
 	var id_lang = getCurrentLang();
-	$.get(ajax_url + "?action=getItemDetails&id=" + id + "&id_lang=" + id_lang + "&token=" + token_menu, function (res) {
+	$.get(ajax_url + "?action=getItemDetails&id=" + id + "&id_lang=" + id_lang + "&token=" + token_menu+"&id_shop="+current_shop, function (res) {
 		// json result
-		console.log(JSON.parse(res));
+		console.log(res);
 		var sweet = $.sweetModal(JSON.parse(res));
 	})
 });
