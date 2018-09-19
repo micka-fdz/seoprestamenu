@@ -12,7 +12,6 @@
       <label for="">{l s='Url' mod='seoprestamenu'}</label>
       <input type="text" class="form-control" name="url" value="{if isset($item->url[$id_lang])}{$item->url[$id_lang]}{/if}">
     </div>
-    {$item|dump}
 
     <div class="form-group sweet-modal-prompt">
       <label for="">{l s='Target' mod='seoprestamenu'}</label>
