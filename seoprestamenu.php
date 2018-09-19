@@ -166,9 +166,10 @@ class Seoprestamenu extends Module implements WidgetInterface
 
     /**
      * Load the configuration form
-     */
+     */ 
     public function getContent()
     {
+        
 
         if (((bool)Tools::isSubmit('submitSeoprestamenuModule')) == true) {
             $this->postProcess();
@@ -197,7 +198,7 @@ class Seoprestamenu extends Module implements WidgetInterface
     public function getMenu($id_lang = null, $id_shop = null)
     {
         if ($id_lang == null) {
-            $id_lang = $this->current_lang;
+            $id_lang = $this->current_lang; 
         }
 
         if ($id_shop == null) {
@@ -375,7 +376,7 @@ class Seoprestamenu extends Module implements WidgetInterface
         if (Tools::getValue('configure') == $this->name) {
             $this->context->controller->addJS($this->_path.'views/js/back.js');
             $this->context->controller->addCSS($this->_path.'views/css/back.css');
-            $this->context->controller->addCSS('https://fonts.googleapis.com/icon?family=Material+Icons');  
+            $this->context->controller->addCSS($this->_path.'views/css/material-icons.css');  
             $this->context->controller->addCSS($this->_path.'views/css/checkbox.css'); 
             $this->context->controller->addCSS($this->_path.'views/sweetmodal/jquery.sweet-modal.min.css');
             $this->context->controller->addCSS($this->_path.'views/sweetalert/sweetalert.css');

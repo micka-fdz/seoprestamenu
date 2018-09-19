@@ -28,9 +28,11 @@
 /**
 *  Nestable css
 */
-.js-mobile-menu {
+#header_infos  .material-icons {
   display: none !important; 
 }  
+
+
 
 .dd {
   position: relative;
@@ -69,6 +71,18 @@
   min-height: 20px;
   font-size: 13px;
   line-height: 20px;
+}
+.dd-item:hover,
+.dd-empty:hover,
+.dd-placeholder:hover{
+  cursor: grab;
+}
+
+.dd-item:active,
+.dd-empty:active,
+.dd-placeholder:active{
+  cursor:grabbing;
+  z-index: 10;
 }
 
 span.item-name{

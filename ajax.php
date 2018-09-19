@@ -1,4 +1,5 @@
 <?php
+
 /*
 * @ajax file
 * @name seoprestathemeadmin
@@ -35,13 +36,14 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
             $module->menu_model->url_engine = false;
 
             $module->menu_model->id_parent  = (isset($mapping[$c->id_parent])) ? $mapping[$c->id_parent] : 0;
-
-            if (sizeof($module->langs) > 1) {
-                foreach ($module->langs as $l) {
+            $langs = Language::getLanguages();
+            if (sizeof($langs) > 1) {
+                foreach ($langs as $l) {
                     $cl  = new Category($cat, $l['id_lang']);
                     $module->menu_model->label[$l['id_lang']]   = $cl->name;
-                    $module->menu_model->url[$l['id_lang']]     = $cl->getLink();
+                    $module->menu_model->url[$l['id_lang']]     = $link->getCategoryLink($cl,null,(int)$l['id_lang']);
                 }
+               
             } else {
                 $module->menu_model->label[$module->current_lang]   = $c->name;
                 $module->menu_model->url[$module->current_lang]     = $c->getLink();
@@ -79,8 +81,8 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
             $module->menu_model->id_parent  = 0;
 
             $link = new Link;
-            if (sizeof($module->langs) > 1) {
-                foreach ($module->langs as $l) {
+            if (sizeof($langs) > 1) {
+                foreach ($langs as $l) {
                     $cl  = new CMS($cms, $l['id_lang']);
 
                     $module->menu_model->label[$l['id_lang']]   = $cl->meta_title;
@@ -122,7 +124,7 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
 
 
 
-        foreach ($module->langs as $l) {
+        foreach ($langs as $l) {
             $module->menu_model->label[$l['id_lang']]   = $label;
             $module->menu_model->url[$l['id_lang']]     = $link;
         }
@@ -200,7 +202,7 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
 
 
 
-        foreach ($module->langs as $l) {
+        foreach ($langs as $l) {
             $module->menu_model->label[$l['id_lang']]   = $label;
             $module->menu_model->url[$l['id_lang']]     = $link;
         }
@@ -304,7 +306,7 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
         $id_item  = (int)Tools::getValue('id');
         $id_lang  = (int)Tools::getValue('id_lang');
         $item     = new $module->menu_model($id_item);
-        // $langs    = $module->langs;
+        // $langs    = $langs;
         $lang   = new Language($id_lang);
     
         $json     = array();
