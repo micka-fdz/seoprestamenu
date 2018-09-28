@@ -77,15 +77,12 @@ var reset_product_form = function () {
 		var id_lang = $('#form_switch_language').val();
 		var menu = $('.dd').nestable('serialize');
 
-		$(".menu-loader").removeClass('hide');
 		$.post(ajax_url + "?action=updateMenu&id_lang=" + id_lang + "&token=" + token_menu +"&id_shop="+current_shop, {
 			menu: menu
 		}, function (res) {
 			showSuccessMessage(success_menu_updated);
-			$(".menu-loader").addClass('hide');
 		}).error(function (error) {
 			$('body').html(error.responseText)
-			$(".menu-loader").addClass('hide');
 		})
 
 
@@ -97,11 +94,9 @@ var reset_product_form = function () {
 	}
 
 	var reloadMenu = function () {
-		$(".menu-loader").removeClass('hide');
+
 		var id_lang = $('#form_switch_language').val();
 		$.get(ajax_url + "?action=reloadMenu&id_lang=" + id_lang + "&token=" + token_menu+"&id_shop="+current_shop, function (data) {
-
-			$(".menu-loader").addClass('hide');
 			$("#nestable").replaceWith(data);
 			initMenu();
 		})

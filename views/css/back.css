@@ -607,3 +607,11 @@ ul.menu-widgets li.active div.content{
   margin-left: -16px;
   margin-top: -6px;
 }
+
+@media (max-width: 992px)
+{
+  .menu-content{
+    clear: both;
+    padding-top: 5px;
+  }
+}

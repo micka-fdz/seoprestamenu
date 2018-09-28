@@ -39,7 +39,7 @@
 </script>
 
 <div class="panel">
-	<h3><i class="icon icon-credit-card"></i> {l s='Configure your menu' mod='seoprestamenu'}</h3>
+	<h3><i class="icon icon-gear"></i> {l s='Configure your menu' mod='seoprestamenu'}</h3>
 	<div class="row">
 		<div class="col-md-12 col-lg-6">
 			<div class="col-md-12">
@@ -196,7 +196,6 @@
 
 		<div>&nbsp;</div>
 		<div class="col-md-12 menu-content">
-			<div class="menu-loader hide"><i class="icon icon-spinner icon-spin icon-3x icon-fw"></i> <span>{l s='Loading...' mod='seoprestamenu'}</span></div>
 				{include file="./menu.tpl" start=true}
 		</div>
 				{* <button id="saveMenu" class="btn btn-primary">{l s='Save menu' mod='seoprestamenu'}</button> *}

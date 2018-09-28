@@ -224,12 +224,22 @@ $(document).on('change', '.dd', function () {
 
 });
 
+var autoresize = function()
+{
+	if($(window).width() <= 992)
+	{
+		$(".autosize").css('width', '100%');
+	}else{
+		$(".autosize").css('width', $('#nestable').width() + 92);
+	}
+}
+
 $(window).resize(function () {
-	$(".autosize").css('width', $('#nestable').width() + 92);
+	autoresize();
 });
 
 $(function () {
-	$(".autosize").css('width', $('#nestable').width() + 92);
+	autoresize();
 
 	$('#product_ajax').typeahead({
 
