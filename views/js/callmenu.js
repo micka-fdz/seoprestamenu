@@ -94,7 +94,6 @@ $(document).on('click', ".dd-item span.button-edit", function () {
 	var id_lang = getCurrentLang();
 	$.get(ajax_url + "?action=getItemDetails&id=" + id + "&id_lang=" + id_lang + "&token=" + token_menu+"&id_shop="+current_shop, function (res) {
 		// json result
-		console.log(res);
 		var sweet = $.sweetModal(JSON.parse(res));
 	})
 });
@@ -281,4 +280,4 @@ $(function () {
 	})
 	// nestable menu
 	initMenu();
-})
+}) 
