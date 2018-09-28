@@ -30,6 +30,7 @@ if (!defined('_PS_VERSION_')) {
 use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
 
 include_once 'models/SeoprestamenuModel.php';
+include_once dirname(__FILE__).'/../seoprestasilo/seoprestasilo.php';
 class Seoprestamenu extends Module implements WidgetInterface
 {
     protected $config_form = false;
@@ -59,7 +60,7 @@ class Seoprestamenu extends Module implements WidgetInterface
 
         parent::__construct();
 
-          
+        $this->theme_admin = new Seoprestasilo;
         $this->displayName = $this->l('seoprestamenu');
         $this->description = $this->l('seoprestamenu - a new menu 100% seo friendly');
 
@@ -84,7 +85,7 @@ class Seoprestamenu extends Module implements WidgetInterface
         return parent::install()          &&
             $this->generateToken()        &&
             $this->registerHook('header') &&
-            $this->registerHook('displayNavFullWidth') &&
+            // $this->registerHook('displayNavFullWidth') &&
             $this->registerHook('backOfficeHeader');
     }
 
@@ -95,8 +96,9 @@ class Seoprestamenu extends Module implements WidgetInterface
      */
     public function installDefaultCat()
     {
-        $root_cat   = Category::getRootCategory();
-        $ids        = Db::getInstance()->executeS("SELECT id_category FROM "._DB_PREFIX_."category WHERE id_parent = ".$root_cat->id." AND active = 1 LIMIT 0,5");
+        $root_cat   = (object)Category::getRootCategory();
+        $id_root    = (int)$root_cat->id;
+        $ids        = Db::getInstance()->executeS("SELECT id_category FROM "._DB_PREFIX_."category WHERE id_parent = ".$id_root." AND active = 1 LIMIT 0,5");
         $langs      = Language::getLanguages();
         $position   = 0;
 
@@ -106,7 +108,8 @@ class Seoprestamenu extends Module implements WidgetInterface
             $model->type = 'category';
             $model->url_engine = 0;
             $model->id_parent = 0;
-            $model->target = 'self';
+            $model->target = '_self';
+            $model->id_shop = (int)Context::getContext()->shop->id;
             foreach($langs as $l)
             {
                 $c = new Category($cat['id_category'],$l['id_lang'],$this->context->shop->id);
@@ -327,6 +330,8 @@ class Seoprestamenu extends Module implements WidgetInterface
      */
     public function searchProduct($id_lang, $expr)
     {
+        $id_lang    = (int)$id_lang;
+        $expr       = pSQL($expr);
         $db =  Db::getInstance();
         $sql = "SELECT pl.id_product, pl.name,p.reference, pl.link_rewrite FROM "._DB_PREFIX_."product as p, "._DB_PREFIX_."product_lang as pl ";
         $sql .= "WHERE p.id_product = pl.id_product ";
@@ -375,13 +380,15 @@ class Seoprestamenu extends Module implements WidgetInterface
     public function hookBackOfficeHeader()
     {
         if (Tools::getValue('configure') == $this->name) {
-            $this->context->controller->addJS($this->_path.'views/js/back.js');
             $this->context->controller->addCSS($this->_path.'views/css/back.css');
             $this->context->controller->addCSS($this->_path.'views/css/material-icons.css');  
             $this->context->controller->addCSS($this->_path.'views/css/checkbox.css'); 
             $this->context->controller->addCSS($this->_path.'views/sweetmodal/jquery.sweet-modal.min.css');
             $this->context->controller->addCSS($this->_path.'views/sweetalert/sweetalert.css');
             
+            // fix for version 1.7.4.2
+            $this->context->controller->addJquery();
+            $this->context->controller->addJS($this->_path.'views/js/back.js');
             $this->context->controller->addJS($this->_path.'views/js/jquery.nestable.js');
             $this->context->controller->addJS($this->_path.'views/js/jquery.nestable++.js');
             $this->context->controller->addJS($this->_path.'views/js/bootstrap-typeahead.js');
@@ -442,17 +449,67 @@ class Seoprestamenu extends Module implements WidgetInterface
         $root     = Category::getRootCategory();
         $id_root  = $root->id;
 
+
+        $silo     = false;
+
+        // blog category
+        if (isset($this->context->controller->module)
+            && $this->context->controller->module->name == 'smartblog'
+            && Tools::getIsset('controller') && Tools::getValue('controller') == 'category'
+            ) {
+            $id_category = (int)Tools::getValue('id_category');
+            $silo = $this->theme_admin->getSiloByBlogCategory($id_category, $this->id_shop);
+        }
+
+        // blog details
+        if (isset($this->context->controller->module)
+            && $this->context->controller->module->name == 'smartblog'
+            && Tools::getIsset('controller') && Tools::getValue('controller') == 'details'
+            ) {
+            $id_post = (int)Tools::getValue('id_post');
+            $categories = BlogCategory::getPostCategoriesFull($id_post, $this->id_shop);
+            $id_category = key($categories);
+            if ($id_category == null) {
+                $silo = false;
+            } else {
+                $silo = $this->theme_admin->getSiloByBlogCategory($id_category, $this->id_shop);
+            }
+        }
+
+        if ($this->context->controller->php_self == 'category') {
+            $cat_id = $this->searchParentCategoryRecursive((int)Tools::getValue('id_category'), $id_root);
+            $silo   = $this->theme_admin->getSiloByCategory($cat_id, $this->id_shop);
+        }
+
+        if ($this->context->controller->php_self == 'cms') {
+            $id_cms = (int)Tools::getValue('id_cms');
+
+            $silo   = $this->theme_admin->getSiloByCMS($id_cms, $this->id_shop);
+        }
+
+        if ($this->context->controller->php_self == 'product') {
+            $id_product = (int)Tools::getValue('id_product');
+            $product = new Product($id_product, $full = false, $id_lang, $id_shop);
+            $cat_id = $this->searchParentCategoryRecursive((int)$product->id_category_default, $id_root);
+            $silo   = $this->theme_admin->getSiloByCategory($cat_id, $this->id_shop);
+        }
+
+
         $items = $this->menu_model->getItems($id_lang, $id_shop, true);
 
         // $context->smarty->assign('langs', $this->langs);
         // $context->smarty->assign('helperMenu', $this);
         $detect = new Mobile_Detect;
+        $page_exe_silo = array('category','cms','product','module-smartblog-category','module-smartblog-details');
         $widgetVariables = array(
             'items' => $items,
             'id_lang' => $id_lang,
             'root_cat' => $id_root,
+            'silo' => $silo,
             'is_mobile' => $detect->isMobile(),
             'is_tablet' => $detect->isTablet(),
+            'page_exe_silo' => $page_exe_silo,
+            // 'clocking' => $this->isGoogle(),
             'helperMenu' => $this,
             'langs' => $this->langs,
             'root_link' => $this->context->link->getCategoryLink($root)
@@ -460,7 +517,6 @@ class Seoprestamenu extends Module implements WidgetInterface
 
         return $widgetVariables;
     }
-
     /**
      * RenderWidget
      *
