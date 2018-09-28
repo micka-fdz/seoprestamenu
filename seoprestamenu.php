@@ -287,7 +287,7 @@ class Seoprestamenu extends Module implements WidgetInterface
     }
 
     /**
-     * Undocumented function
+     * get Category Tree
      *
      * @param [type] $id_product
      * @param [type] $id_lang
@@ -297,26 +297,17 @@ class Seoprestamenu extends Module implements WidgetInterface
     public static function getCategoryTree($id_product, $id_lang, $name = 'categoryBox')
     {
         $module = new Seoprestamenu;
+        $root = Category::getRootCategory();
+        $selected_cat = array($root->id);
+        $tree = new HelperTreeCategories('categories-treeview', $module->l('Choose a category'));
+        $tree->setUseCheckBox(true)
+        ->setAttribute('is_category_filter', $root->id)
+        ->setRootCategory($root->id)
+        ->setSelectedCategories($selected_cat)
+        ->setUseSearch(false);
 
-        if (version_compare(_PS_VERSION_, '1.6.0.0', '>=')) {
-            $root = Category::getRootCategory();
-            $selected_cat = array($root->id);
-            $tree = new HelperTreeCategories('categories-treeview', $module->l('Choose a category'));
-            $tree->setUseCheckBox(true)
-            ->setAttribute('is_category_filter', $root->id)
-            ->setRootCategory($root->id)
-            ->setSelectedCategories($selected_cat)
-            ->setUseSearch(false);
-
-            return $tree->render();
-        } else {
-            $root = Category::getRootCategory();
-            $selected_cat = Product::getProductCategoriesFull($id_product, $id_lang);
-            $tab_root = array('id_category' => $root->id, 'name' => $root->name);
-            $helper = new Helper();
-            $category_tree = $helper->renderCategoryTree($tab_root, $selected_cat, $name, false, true, array(), false, true);
-            return $category_tree;
-        }
+        return $tree->render();
+        
     }
 
 
