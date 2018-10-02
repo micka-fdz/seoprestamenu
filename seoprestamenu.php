@@ -83,7 +83,7 @@ class Seoprestamenu extends Module implements WidgetInterface
             return parent::install()          &&
             $this->generateToken()        &&
             $this->registerHook('header') &&
-            // $this->registerHook('displayNavFullWidth') &&
+            $this->registerHook('displayNavFullWidth') &&
             $this->registerHook('backOfficeHeader');
         }
         
