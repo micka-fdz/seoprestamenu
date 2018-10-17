@@ -175,6 +175,7 @@ class Seoprestamenu extends Module implements WidgetInterface
             if (((bool)Tools::isSubmit('submitSeoprestamenuModule')) == true) {
                 $this->postProcess();
             }
+
             
             $this->context->smarty->assign('module_dir', $this->_path);
             $this->context->smarty->assign('menu', $this->getMenu());
@@ -209,7 +210,11 @@ class Seoprestamenu extends Module implements WidgetInterface
             
             
             $items = $this->menu_model->getItems($id_lang, $id_shop, true);
+
             $this->context->smarty->assign('items', $items);
+            if($id_lang !== $this->current_lang){
+                $this->context->smarty->assign('override_lang', $id_lang);
+            }
             $this->context->smarty->assign('start', true);
             return $this->context->smarty->fetch($this->local_path.'views/templates/admin/menu.tpl');
         }
@@ -438,10 +443,7 @@ class Seoprestamenu extends Module implements WidgetInterface
             $root     = Category::getRootCategory();
             $id_root  = $root->id;
             
-            
-            
-            
-            
+
             $items = $this->menu_model->getItems($id_lang, $id_shop, true);
             
             // $context->smarty->assign('langs', $this->langs);

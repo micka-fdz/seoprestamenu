@@ -1,6 +1,9 @@
 {$childrens = array()}
-{$childrens = $helperMenu->menu_model->getChilden($item.id_item,$helperMenu->current_lang)}
-
+{if isset($override_lang)}
+    {$childrens = $helperMenu->menu_model->getChilden($item.id_item,$override_lang)}
+{else}
+    {$childrens = $helperMenu->menu_model->getChilden($item.id_item,$helperMenu->current_lang)}
+{/if}
 <li class="dd-item" data-id="{$item.id_item|escape:'htmlall':'UTF-8'}" data-name="{$item.label|escape:'htmlall':'UTF-8'}" data-slug="{$item.label|escape:'htmlall':'UTF-8'}" data-new="0" data-deleted="0">
     <div class="dd-handle">
         <i class="material-icons">drag_indicator</i> 

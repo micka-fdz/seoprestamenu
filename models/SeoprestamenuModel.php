@@ -89,7 +89,6 @@ class SeoprestamenuModel extends ObjectModel
         $sql = new DbQuery();
         $sql->select('*');
         $sql->from('seoprestamenu_item', 'i');
-
         if ($idLang) {
             if ($idShop) {
                 $sql->innerJoin('seoprestamenu_item_lang', 'l', 'i.id_item = l.id_item AND l.id_lang = '.(int) $idLang.' AND l.id_shop = '.(int) $idShop);
