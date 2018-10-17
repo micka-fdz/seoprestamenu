@@ -243,7 +243,7 @@ $(function () {
 	$('#product_ajax').typeahead({
 
 		ajax: {
-			url: ajax_url + "?action=searchProduct&token=" + token_menu,
+			url: ajax_url + "?action=searchProduct&token=" + token_menu + "&id_lang="+$("#form_switch_language").val(),
 			loadingClass: "loading-circle",
 			preProcess: function (data) {
 				return data;

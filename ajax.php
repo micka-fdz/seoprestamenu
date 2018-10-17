@@ -93,9 +93,9 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
             $langs = Language::getLanguages();
             if (sizeof($langs) > 1) {
                 foreach ($langs as $l) {
-                    $cl  = new CMS($cms, $l['id_lang']);
+                    $cl  = new CMS($cms, (int)$l['id_lang']);
                     $module->menu_model->label[$l['id_lang']]   = $cl->meta_title;
-                    $module->menu_model->url[$l['id_lang']]     = $link->getCMSLink($cl);
+                    $module->menu_model->url[$l['id_lang']]     = $link->getCMSLink($cl,null, null, (int)$l['id_lang']);
                     if(Tools::getIsset('id_shop'))
                     {
                         $id_shop = (int)Tools::getValue('id_shop');
@@ -179,9 +179,14 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
     ##### Search product for autocomplete
     if ($action == 'searchProduct') {
         $link = new Link;
+        $id_lang = (int)$module->current_lang;
+        if(Tools::getIsset('id_lang'))
+        {
+            $id_lang = (int)Tools::getValue('id_lang');
+        }
         
         $output = array();
-        $results = $module->searchProduct($module->current_lang, pSQL(Tools::getValue('query')));
+        $results = $module->searchProduct($id_lang, pSQL(Tools::getValue('query')));
         if (sizeof($results) > 0) {
             foreach ($results as $p):
                 $output[] = [
@@ -215,20 +220,21 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
     
     ##### Send product to menu
     if ($action == 'addProductMenu') {
-        $link = htmlspecialchars(Tools::getValue('link'));
+        // $link = htmlspecialchars(Tools::getValue('link'));
         $label = htmlspecialchars(Tools::getValue('label'));
         $target = htmlspecialchars(Tools::getValue('target'));
+        $id_product = (int)Tools::getValue('id_product');
         
         $module->menu_model->type       = "product";
         $module->menu_model->target     = $target;
         $module->menu_model->url_engine = false;
         $module->menu_model->id_parent  = 0;
         
-        
+        $link = new Link;
         $langs = Language::getLanguages();
         foreach ($langs as $l) {
             $module->menu_model->label[$l['id_lang']]   = $label;
-            $module->menu_model->url[$l['id_lang']]     = $link;
+            $module->menu_model->url[$l['id_lang']]     = $link->getProductLink($id_product,null,null,null,(int)$l['id_lang']);
         }
         
         

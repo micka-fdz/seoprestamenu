@@ -144,10 +144,10 @@
 										<input type="text" required class="form-control" name="label" id="label" >
 									</div>
 
-									<div class="form-group">
+									{* <div class="form-group">
 										<label>{l s='link' mod='seoprestamenu'}</label>
 										<input type="link" required class="form-control" name="link" id="link" >
-									</div>
+									</div> *}
 
 									<!-- target -->
 									<div class="form-group">

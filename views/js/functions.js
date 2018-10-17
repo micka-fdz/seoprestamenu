@@ -39,7 +39,7 @@ var reset_product_form = function () {
 
 			$('.hidden-fields').removeClass('hide');
 			$('#ajax_search_product #label').val(json.name);
-			$('#ajax_search_product #link').val(json.custom_link);
+			// $('#ajax_search_product #link').val(json.custom_link);
 			$('#ajax_search_product #id_product').val(json.id);
 
 		});
