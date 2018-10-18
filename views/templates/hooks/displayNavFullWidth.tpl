@@ -1,12 +1,7 @@
-{* <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> *}
- <div class="container">
+
+<div class="container">
 			<div class="row">
-				<div id="seoprestamenu_navigation" class="col-xs-12 col-md-12 col-sm-12">
-				<p class="hidden-md-up navigation-nav-title">
-					{l s='Navigation' mod='seoprestamenu'}
-					<span class="pull-right"><i class="fa fa-bars"></i></span>
-				</p>
-					<div class="site-navigation hidden-sm-down">
+					<div class="site-navigation hidden-sm-down"> 
 						<nav class="main-navigation default-navigation {*align_center*}">
 							<ul class="menu-main-menu">
 							{if $items|count > 0}
@@ -19,7 +14,7 @@
 					</div><!-- .site-navigation -->
 
 					<!-- MOBILE MENU -->
-					<div class="sm-menu slide-from-right hidden-md-up">
+					<div id="_desktop_top_menu" class="sm-menu slide-from-right hidden-md-up">
 							<div class="nano">
 								<div class="content">
 									<div class="offcanvas_content_right">

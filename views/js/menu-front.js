@@ -49,7 +49,7 @@ $(document).ready(function ($) {
 
 
 	// Mobile menu ---------------------------------------
-	$(".mobile-navigation .menu-item-has-children").append('<div class="more"><i class="fa fa-plus-circle"></i></div>');
+	$(".mobile-navigation .menu-item-has-children").append('<div class="more"><i class="fa fa-chevron-right"></i></div>');
 
 	$(".mobile-navigation").on("click", ".more", function (e) {
 		e.stopPropagation();
@@ -57,13 +57,13 @@ $(document).ready(function ($) {
 		$(this).parent().toggleClass("current")
 			.children(".sub-menu").toggleClass("open");
 
-		$(this).html($(this).html() == '<i class="fa fa-plus-circle"></i>' ? '<i class="fa fa-minus-circle"></i>' : '<i class="fa fa-plus-circle"></i>');
+		$(this).html($(this).html() == '<i class="fa fa-chevron-right"></i>' ? '<i class="fa fa-chevron-down"></i>' : '<i class="fa fa-chevron-right"></i>');
 	});
 
 	$(".mobile-navigation").on("click", "a", function (e) {
 		if (($(this).attr('href') === "#") || ($(this).attr('href') === "")) {
 			$(this).parent().children(".sub-menu").toggleClass("open");
-			$(this).parent().children(".more").html($(this).parent().children(".more").html() == '<i class="fa fa-plus-circle"></i>' ? '<i class="fa fa-minus-circle"></i>' : '<i class="fa fa-plus-circle"></i>');
+			$(this).parent().children(".more").html($(this).parent().children(".more").html() == '<i class="fa fa-chevron-right"></i>' ? '<i class="fa fa-chevron-down"></i>' : '<i class="fa fa-chevron-right"></i>');
 		}
 	});
 
