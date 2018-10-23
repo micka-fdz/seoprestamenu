@@ -4,8 +4,8 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{seoprestamenu}prestashop>ajax_fa46ea6f6f6623fdd7039b5f1a8f3940'] = 'Aucune action';
 $_MODULE['<{seoprestamenu}prestashop>ajax_352090599931769174fd12fc4dba1660'] = 'Clé de sécurité erronée';
-$_MODULE['<{seoprestamenu}prestashop>seoprestamenu_893454ce3bd8a49290d9a8be4a934b15'] = 'SeoPresta - Menu';
-$_MODULE['<{seoprestamenu}prestashop>seoprestamenu_9fd4add4397a872b26e5152250207efc'] = 'SeoPrestaMenu - un module de menu 100% seo friendly';
+$_MODULE['<{seoprestamenu}prestashop>seoprestamenu_ba93cdcf5c33b46aaa90dfd31d5fc4f8'] = 'Smart Menu';
+$_MODULE['<{seoprestamenu}prestashop>seoprestamenu_1830d22bcd2cab4fc177ef8022c90075'] = 'Smart Menu - nouveau module de menu pour PrestaShop !';
 $_MODULE['<{seoprestamenu}prestashop>seoprestamenu_0173374ac20f5843d58b553d5b226ef6'] = 'Choisissez une catégorie';
 $_MODULE['<{seoprestamenu}prestashop>ajax_form_details_b021df6aac4654c454f46c77646e745f'] = 'Label';
 $_MODULE['<{seoprestamenu}prestashop>ajax_form_details_02a3a357710cc2a5dfdfb74ed012fb59'] = 'Url';
@@ -41,7 +41,5 @@ $_MODULE['<{seoprestamenu}prestashop>configure_2a304a1348456ccd2234cd71a81bd338'
 $_MODULE['<{seoprestamenu}prestashop>configure_8a6659f67cb5dc1b775ab7b9a22fd9a1'] = 'Ajouter un produit au menu';
 $_MODULE['<{seoprestamenu}prestashop>configure_3a08e2e340ab29fd9263af48193cbf8e'] = 'Langues';
 $_MODULE['<{seoprestamenu}prestashop>configure_c8ddf0daeb972422159148fda3c3fa56'] = 'Supprimer le(s) élément(s)';
-$_MODULE['<{seoprestamenu}prestashop>configure_8524de963f07201e5c086830d370797f'] = 'Chargement...';
 $_MODULE['<{seoprestamenu}prestashop>configure_f692973556248ff9ef223e21fb42852a'] = 'Sauvegarder le menu';
 $_MODULE['<{seoprestamenu}prestashop>menu_1ff51c1fa6c2cb5e8feacad02e9a6fb1'] = 'Pas d\'éléments dans le menu';
-$_MODULE['<{seoprestamenu}prestashop>displaynavfullwidth_846495f9ceed11accf8879f555936a7d'] = 'Navigation';
