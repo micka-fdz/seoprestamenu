@@ -39,7 +39,7 @@ class Seoprestamenu extends Module implements WidgetInterface
         $this->name = 'seoprestamenu';
         $this->tab = 'administration';
         $this->version = '1.0.0';
-        $this->author = 'seopresta';
+        $this->author = 'SeoPresta.com';
         $this->need_instance = 0;
         
         /**
@@ -59,8 +59,8 @@ class Seoprestamenu extends Module implements WidgetInterface
         
         parent::__construct();
         
-        $this->displayName = $this->l('seoprestamenu');
-        $this->description = $this->l('seoprestamenu - a new menu 100% seo friendly');
+        $this->displayName = $this->l('Smart menu');
+        $this->description = $this->l('Smart menu - a new menu 100% seo friendly');
         
         $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
         $this->templateFile = 'module:seoprestamenu/views/templates/hooks/displayNavFullWidth.tpl';
@@ -110,9 +110,10 @@ class Seoprestamenu extends Module implements WidgetInterface
                 $model->id_shop = (int)Context::getContext()->shop->id;
                 foreach($langs as $l)
                 {
-                    $c = new Category($cat['id_category'],$l['id_lang'],$this->context->shop->id);
-                    $model->url[(int)$l['id_lang']] = $this->context->link->getCategoryLink($c);
-                    $model->label = pSQL($c->name);
+                    $c = new Category((int)$cat['id_category'],(int)$l['id_lang'],$this->context->shop->id);
+
+                    $model->url[(int)$l['id_lang']] = $this->context->link->getCategoryLink($c, null, (int)$l['id_lang']);
+                    $model->label[(int)$l['id_lang']] = pSQL($c->name);
                     
                 }
                 $model->add();
