@@ -66,416 +66,342 @@ class Seoprestamenu extends Module implements WidgetInterface
         $this->templateFile = 'module:seoprestamenu/views/templates/hooks/displayNavFullWidth.tpl';
     }
     
-    
-    // test
     /**
-    * Don't forget to create update methods if needed:
-        * http://doc.prestashop.com/display/PS16/Enabling+the+Auto-Update
-        */
-        public function install()
-        {
-            Configuration::updateValue('SEOPRESTAMENU_LIVE_MODE', false);
-            include(dirname(__FILE__).'/sql/install.php');
-            $this->installDefaultCat(); 
-            if(Module::isInstalled('ps_mainmenu')){
-                Module::disableByName('ps_mainmenu');
-            }
-            return parent::install()          &&
-            $this->generateToken()        &&
-            $this->registerHook('header') &&
-            $this->registerHook('displayNavFullWidth') &&
-            $this->registerHook('backOfficeHeader');
+     * Don't forget to create update methods if needed:
+     * http://doc.prestashop.com/display/PS16/Enabling+the+Auto-Update
+     */
+    public function install()
+    {
+        Configuration::updateValue('SEOPRESTAMENU_LIVE_MODE', false);
+        include(dirname(__FILE__).'/sql/install.php');
+        $this->installDefaultCat(); 
+        if(Module::isInstalled('ps_mainmenu')){
+            Module::disableByName('ps_mainmenu');
         }
+        return parent::install()      &&
+        $this->generateToken()        &&
+        $this->registerHook('header') &&
+        $this->registerHook('displayNavFullWidth') &&
+        $this->registerHook('backOfficeHeader');
+    }
         
-        /**
-        * Install default Categories.
-        *
-        * @return void
-        */
-        public function installDefaultCat()
+    /**
+    * Install default Categories.
+    *
+    * @return void
+    */
+    public function installDefaultCat()
+    {
+        $root_cat     = (object)Category::getRootCategory();
+        $id_root      = (int)$root_cat->id;
+        $category_ids = Db::getInstance()->executeS("SELECT id_category FROM "._DB_PREFIX_."category WHERE id_parent = ".$id_root." AND active = 1 LIMIT 0,5");
+        $langs        = Language::getLanguages();
+        $shop_id      = Context::getContext()->shop->id;
+
+        foreach($category_ids as $category_id)
         {
-            $root_cat   = (object)Category::getRootCategory();
-            $id_root    = (int)$root_cat->id;
-            $ids        = Db::getInstance()->executeS("SELECT id_category FROM "._DB_PREFIX_."category WHERE id_parent = ".$id_root." AND active = 1 LIMIT 0,5");
-            $langs      = Language::getLanguages();
-            $position   = 0;
-            
-            foreach($ids as $cat)
+            $menuModel = new SeoprestamenuModel;
+            $menuModel->type = 'category';
+            $menuModel->url_engine = 0;
+            $menuModel->id_parent = 0;
+            $menuModel->target = '_self';
+            $menuModel->id_shop = $shop_id;
+            foreach($langs as $lang)
             {
-                $model = new SeoprestamenuModel;
-                $model->type = 'category';
-                $model->url_engine = 0;
-                $model->id_parent = 0;
-                $model->target = '_self';
-                $model->id_shop = (int)Context::getContext()->shop->id;
-                foreach($langs as $l)
-                {
-                    $c = new Category((int)$cat['id_category'],(int)$l['id_lang'],$this->context->shop->id);
+                $category_id = (int) $category_id['id_category'];
+                $lang_id = (int) $lang['id_lang'];
+                $category = new Category($category_id, $lang_id, $shop_id);
 
-                    $model->url[(int)$l['id_lang']] = $this->context->link->getCategoryLink($c, null, (int)$l['id_lang']);
-                    $model->label[(int)$l['id_lang']] = pSQL($c->name);
-                    
-                }
-                $model->add();
-                $position++;
-            }
-            
-        } 
-        
-        public function installDB()
-        {
-            // install Database on intall module
-            include(dirname(__FILE__).'/sql/install.php');
-        }
-        
-        public function uninstall()
-        {
-            include(dirname(__FILE__).'/sql/uninstall.php');
-            Configuration::deleteByName('SEOPRESTAMENU_LIVE_MODE');
-            
-            return parent::uninstall(); 
-        }
-        
-        /*
-        Generate a token at install FOR AJAX
-        */
-        
-        private function generateToken()
-        {
-            $random = $this->generateRandomString();
-            return Configuration::updateValue('_SEO_PRESTA_MENU_TOKEN_', $random);
-        }
-        
-        private function getToken()
-        {
-            return Configuration::get('_SEO_PRESTA_MENU_TOKEN_');
-        }
-        
-        
-        /*
-        Return string
-        generate random token
-        */
-        public function generateRandomString($length = 10)
-        {
-            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            $randomString = '';
-            for ($i = 0; $i < $length; $i++) {
-                $randomString .= $characters[rand(0, Tools::strlen($characters) - 1)];
-            }
-            return md5($randomString);
-        }
-        
-        /**
-        * Load the configuration form
-        */ 
-        public function getContent()
-        {
-            
-            
-            if (((bool)Tools::isSubmit('submitSeoprestamenuModule')) == true) {
-                $this->postProcess();
-            }
+                $model->url[$lang_id] = $this->context->link->getCategoryLink($category, null, $lang_id);
+                $model->label[$lang_id] = pSQL($category->name);
 
-            
-            $this->context->smarty->assign('module_dir', $this->_path);
-            $this->context->smarty->assign('menu', $this->getMenu());
-            $this->context->smarty->assign('categoriesTree', $this->getCategoryTree(null, $this->current_lang));
-            $this->context->smarty->assign('cmsPages', $this->getCMSPages());
-            $this->context->smarty->assign('current_shop', $this->context->shop->id);
-            
-            
-            $output = $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl');
-            
-            return $output;
+            }
+            $menuModel->add();
         }
-        
-        public function getItemsByParent($items)
-        {
-            $res = array();
-            foreach ($items as $item) {
-                $res[$item['id_parent']][] = $item;
-            }
-            return $res;
-        }
-        
-        public function getMenu($id_lang = null, $id_shop = null)
-        {
-            if ($id_lang == null) {
-                $id_lang = $this->current_lang; 
-            }
-            
-            if ($id_shop == null) {
-                $id_shop =   $this->id_shop;
-            }
-            
-            
-            $items = $this->menu_model->getItems($id_lang, $id_shop, true);
 
-            $this->context->smarty->assign('items', $items);
-            if($id_lang !== $this->current_lang){
-                $this->context->smarty->assign('override_lang', $id_lang);
-            }
-            $this->context->smarty->assign('start', true);
-            return $this->context->smarty->fetch($this->local_path.'views/templates/admin/menu.tpl');
+    } 
+        
+    public function installDB()
+    {
+        // install Database on intall module
+        include(__DIR__.'/sql/install.php');
+    }
+
+    public function uninstall()
+    {
+        include(__DIR__.'/sql/uninstall.php');
+        Configuration::deleteByName('SEOPRESTAMENU_LIVE_MODE');
+
+        return parent::uninstall(); 
+    }
+        
+    /**
+     * Generate a token at install FOR AJAX
+     */
+    private function generateToken()
+    {
+        $random = $this->generateRandomString();
+
+        return Configuration::updateValue('_SEO_PRESTA_MENU_TOKEN_', $random);
+    }
+
+    private function getToken()
+    {
+        return Configuration::get('_SEO_PRESTA_MENU_TOKEN_');
+    }
+        
+    /**
+     * @return string
+     * generate random token
+     */
+    public function generateRandomString($length = 10)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, Tools::strlen($characters) - 1)];
         }
-        
-        /**
-        * Undocumented function
-        *
-        * @param [type] $item
-        * @param [type] $id_lang
-        * @return void
-        */
-        public function displayAjaxForm($item, $id_lang)
-        {
-            $this->context->smarty->assign('item', $item);
-            $this->context->smarty->assign('id_lang', $id_lang);
-            
-            return $this->context->smarty->fetch($this->local_path.'views/templates/admin/ajax_form_details.tpl');
+
+        return md5($randomString);
+    }
+
+    /**
+     * Load the configuration form
+     */ 
+    public function getContent()
+    {
+        if (((bool)Tools::isSubmit('submitSeoprestamenuModule')) == true) {
+            $this->postProcess();
         }
-        
-        
-        
-        ######### CATEGORIES MODELS
-        
-        /**
-        * Undocumented function
-        *
-        * @param [type] $node
-        * @param integer $level
-        * @param [type] $array
-        * @return void
-        */
-        public function constructTreeNode($node, $level = 0, &$array)
-        {
-            $x = '';
-            $padding_left = 5;
-            $name = preg_replace("#[^a-zA-Z]#", "", $node['name']);
-            for ($i = 0; $i <= $level; $i++) {
-                $calcul_padding = $padding_left * $level."px";
-                $x .= '<span style="padding-left:'.$calcul_padding.'">&nbsp;</span>';
-            }
-            $x.= '- ';
-            
-            $array[] = array('value' => $node['id'] , 'text' => $x. stripcslashes($name)  );
-            if (!empty($node['children'])) {
-                $level++;
-                foreach ($node['children'] as $child) {
-                    self::constructTreeNode($child, $level, $array);
-                }
-            }
-            
-            return $array;
+
+        $this->context->smarty->assign('module_dir', $this->_path);
+        $this->context->smarty->assign('menu', $this->getMenu());
+        $this->context->smarty->assign('categoriesTree', $this->getCategoryTree(null, $this->current_lang));
+        $this->context->smarty->assign('cmsPages', $this->getCMSPages());
+        $this->context->smarty->assign('current_shop', $this->context->shop->id);       
+
+        $output = $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl');
+
+        return $output;
+    }
+
+    public function getItemsByParent($items)
+    {
+        $itemsByParent = array();
+        foreach ($items as $item) {
+            $itemsByParent[$item['id_parent']][] = $item;
         }
-        
-        /**
-        * Undocumented function
-        *
-        * @return void
-        */
-        public function getCategoriesRecursive()
-        {
-            $default_lang   = (int)Configuration::get('PS_LANG_DEFAULT');
-            
-            $categTree      = Category::getRootCategory()->recurseLiteCategTree(0);
-            $array          = array();
-            $array[]        =   array('value' => $categTree['id'] ,
-            'text' => htmlspecialchars($categTree['name']) );
-            
-            foreach ($categTree['children'] as $child) {
-                $output = self::constructTreeNode($child, 0, $array);
-            }
-            
-            return $output;
+
+        return $itemsByParent;
+    }
+
+    public function getMenu($id_lang = null, $id_shop = null)
+    {
+        if ($id_lang == null) {
+            $id_lang = $this->current_lang; 
         }
+
+        if ($id_shop == null) {
+            $id_shop =   $this->id_shop;
+        }
+
+        $items = $this->menu_model->getItems($id_lang, $id_shop, true);
+
+        $this->context->smarty->assign('items', $items);
+        if($id_lang !== $this->current_lang){
+            $this->context->smarty->assign('override_lang', $id_lang);
+        }
+        $this->context->smarty->assign('start', true);
+        return $this->context->smarty->fetch($this->local_path.'views/templates/admin/menu.tpl');
+    }
+
+    public function displayAjaxForm($item, $id_lang)
+    {
+        $this->context->smarty->assign('item', $item);
+        $this->context->smarty->assign('id_lang', $id_lang);
+
+        return $this->context->smarty->fetch($this->local_path.'views/templates/admin/ajax_form_details.tpl');
+    }
         
-        /**
-        * get Category Tree
-        *
-        * @param [type] $id_product
-        * @param [type] $id_lang
-        * @param string $name
-        * @return void
-        */
-        public static function getCategoryTree($id_product, $id_lang, $name = 'categoryBox')
-        {
-            $module = new Seoprestamenu;
-            $root = Category::getRootCategory();
-            $selected_cat = array($root->id);
-            $tree = new HelperTreeCategories('categories-treeview', $module->l('Choose a category'));
-            $tree->setUseCheckBox(true)
+    ######### CATEGORIES MODELS
+
+    public function constructTreeNode($node, $level = 0, &$array)
+    {
+        $x = '';
+        $padding_left = 5;
+        $name = preg_replace("#[^a-zA-Z]#", "", $node['name']);
+        for ($i = 0; $i <= $level; $i++) {
+            $calcul_padding = $padding_left * $level."px";
+            $x .= '<span style="padding-left:'.$calcul_padding.'">&nbsp;</span>';
+        }
+        $x.= '- ';
+
+        $array[] = array(
+            'value' => $node['id'],
+            'text' => $x. stripcslashes($name),
+        );
+
+        if (!empty($node['children'])) {
+            $level++;
+            foreach ($node['children'] as $child) {
+                self::constructTreeNode($child, $level, $array);
+            }
+        }
+
+        return $array;
+    }
+
+    public function getCategoriesRecursive()
+    {
+        $default_lang   = (int)Configuration::get('PS_LANG_DEFAULT');  
+        $categTree      = Category::getRootCategory()->recurseLiteCategTree(0);
+        $array          = array();
+        $array[]        = array(
+            'value' => $categTree['id'] ,
+            'text' => htmlspecialchars($categTree['name']),
+        );
+
+        foreach ($categTree['children'] as $child) {
+            $output = self::constructTreeNode($child, 0, $array);
+        }
+
+        return $output;
+    }
+
+    public static function getCategoryTree($id_product, $id_lang, $name = 'categoryBox')
+    {
+        $module = new Seoprestamenu;
+        $root = Category::getRootCategory();
+        $selected_cat = array($root->id);
+        $tree = new HelperTreeCategories('categories-treeview', $module->l('Choose a category'));
+        $tree->setUseCheckBox(true)
             ->setAttribute('is_category_filter', $root->id)
             ->setRootCategory($root->id)
             ->setSelectedCategories($selected_cat)
             ->setUseSearch(false);
-            
-            return $tree->render();
-            
-        }
-        
-        
-        ####### PRODUCTS MODELS
-        /**
-        * Undocumented function
-        *
-        * @param [type] $id_lang
-        * @param [type] $expr
-        * @return void
-        */
-        public function searchProduct($id_lang, $expr)
-        {
-            $id_lang    = (int)$id_lang;
-            $expr       = pSQL($expr);
-            $db =  Db::getInstance();
-            $sql = "SELECT pl.id_product, pl.name,p.reference, pl.link_rewrite FROM "._DB_PREFIX_."product as p, "._DB_PREFIX_."product_lang as pl ";
-            $sql .= "WHERE p.id_product = pl.id_product ";
-            $sql .= "AND pl.id_lang = $id_lang ";
-            $sql .= "AND pl.name LIKE '%".$expr."%'";
-            
-            return $db->executeS($sql);
-        }
-        
-        
-        ####### CMS PAGES WIDGETS
-        /**
-        * Undocumented function
-        *
-        * @return void
-        */
-        public function getCMSPages()
-        {
-            return CMS::getCMSPages($this->current_lang, null, true, $this->context->shop->id);
-        }
-        
-        
-        ##### Menu model
-        
-        
-        
-        /**
-        * Undocumented function
-        *
-        * @return void
-        */
-        protected function postProcess()
-        {
-            $form_values = $this->getConfigFormValues();
-            
-            foreach (array_keys($form_values) as $key) {
-                Configuration::updateValue($key, Tools::getValue($key));
-            }
-        }
-        
-        /**
-        * Undocumented function
-        *
-        * @return void
-        */
-        public function hookBackOfficeHeader()
-        {
-            if (Tools::getValue('configure') == $this->name) {
-                $this->context->controller->addCSS($this->_path.'views/css/back.css');
-                $this->context->controller->addCSS($this->_path.'views/css/material-icons.css');  
-                $this->context->controller->addCSS($this->_path.'views/css/checkbox.css'); 
-                $this->context->controller->addCSS($this->_path.'views/sweetmodal/jquery.sweet-modal.min.css');
-                $this->context->controller->addCSS($this->_path.'views/sweetalert/sweetalert.css');
-                
-                // fix for version 1.7.4.2
-                $this->context->controller->addJquery();
-                $this->context->controller->addJS($this->_path.'views/js/back.js');
-                $this->context->controller->addJS($this->_path.'views/js/jquery.nestable.js');
-                $this->context->controller->addJS($this->_path.'views/js/jquery.nestable++.js');
-                $this->context->controller->addJS($this->_path.'views/js/bootstrap-typeahead.js');
-                $this->context->controller->addJS($this->_path.'views/sweetmodal/jquery.sweet-modal.min.js');
-                $this->context->controller->addJS($this->_path.'views/sweetalert/sweetalert.min.js');
-                $this->context->controller->addJS($this->_path.'views/js/functions.js');
-                $this->context->controller->addJS($this->_path.'views/js/callmenu.js');
-            }
-        }
-        
-        /**
-        * Undocumented function
-        *
-        * @return void
-        */
-        public function hookHeader()
-        {
-            $this->context->controller->addJS($this->_path.'/views/js/menu-front.js');
-            $this->context->controller->addJS($this->_path.'/views/js/jquery.nanoscroller.min.js');
-            $this->context->controller->addCSS($this->_path.'/views/css/front.css');
-        }
-        
-        
-        /**
-        * Undocumented function
-        *
-        * @param [type] $id_category
-        * @param integer $parent
-        * @return void
-        */
-        public function searchParentCategoryRecursive($id_category, $parent = 2)
-        {
-            if ($id_category == $parent) {
-                return $id_category;
-            }
-            $c = new Category($id_category, $this->current_lang, $this->id_shop);
-            if ($c->id_parent == $parent) {
-                return $c->id;
-            } else {
-                return $this->searchParentCategoryRecursive($c->id_parent, $parent);
-            }
-        }
-        
-        
-        
-        /**
-        * GetWidgetVariable WidgetInterface
-        *
-        * @param [type] $hookName
-        * @param array $configuration
-        * @return array
-        */
-        public function getWidgetVariables($hookName, array $configuration = [])
-        {
-            $id_lang = $this->current_lang;
-            $id_shop = $this->id_shop;
-            $items = $this->menu_model->getItems($id_lang, $id_shop, true);
-            $root     = Category::getRootCategory();
-            $id_root  = $root->id;
-            
 
-            $items = $this->menu_model->getItems($id_lang, $id_shop, true);
-            
-            // $context->smarty->assign('langs', $this->langs);
-            // $context->smarty->assign('helperMenu', $this);
-            $detect = new Mobile_Detect;
-            $widgetVariables = array(
-                'items' => $items,
-                'id_lang' => $id_lang,
-                'root_cat' => $id_root,
-                'is_mobile' => $detect->isMobile(),
-                'is_tablet' => $detect->isTablet(),
-                // 'clocking' => $this->isGoogle(),
-                'helperMenu' => $this,
-                'langs' => $this->langs,
-                'root_link' => $this->context->link->getCategoryLink($root)
-            );
-            
-            return $widgetVariables;
-        }
-        /**
-        * RenderWidget
-        *
-        * @param [type] $hookName
-        * @param array $configuration
-        * @return void
-        */
-        public function renderWidget($hookName, array $configuration = [])
-        {
-            $this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
-            
-            return $this->fetch($this->templateFile);
+        return $tree->render();
+    }
+        
+    ####### PRODUCTS MODELS
+
+    public function searchProduct($id_lang, $expr)
+    {
+        $id_lang = (int)$id_lang;
+        $expr = pSQL($expr);
+        $db =  Db::getInstance();
+        $sql = "SELECT pl.id_product, pl.name,p.reference, pl.link_rewrite FROM "._DB_PREFIX_."product as p, "._DB_PREFIX_."product_lang as pl ";
+        $sql .= "WHERE p.id_product = pl.id_product ";
+        $sql .= "AND pl.id_lang = $id_lang ";
+        $sql .= "AND pl.name LIKE '%".$expr."%'";
+
+        return $db->executeS($sql);
+    }    
+
+    ####### CMS PAGES WIDGETS
+
+    public function getCMSPages()
+    {
+        return CMS::getCMSPages($this->current_lang, null, true, $this->context->shop->id);
+    }
+
+    ##### Menu model
+
+    protected function postProcess()
+    {
+        $form_values = $this->getConfigFormValues();
+
+        foreach (array_keys($form_values) as $key) {
+            Configuration::updateValue($key, Tools::getValue($key));
         }
     }
+
+    public function hookBackOfficeHeader()
+    {
+        if (Tools::getValue('configure') === $this->name) {
+            $this->context->controller->addCSS($this->_path.'views/css/back.css');
+            $this->context->controller->addCSS($this->_path.'views/css/material-icons.css');  
+            $this->context->controller->addCSS($this->_path.'views/css/checkbox.css'); 
+            $this->context->controller->addCSS($this->_path.'views/sweetmodal/jquery.sweet-modal.min.css');
+            $this->context->controller->addCSS($this->_path.'views/sweetalert/sweetalert.css');
+
+            // fix for version 1.7.4.2
+            $this->context->controller->addJquery();
+            $this->context->controller->addJS($this->_path.'views/js/back.js');
+            $this->context->controller->addJS($this->_path.'views/js/jquery.nestable.js');
+            $this->context->controller->addJS($this->_path.'views/js/jquery.nestable++.js');
+            $this->context->controller->addJS($this->_path.'views/js/bootstrap-typeahead.js');
+            $this->context->controller->addJS($this->_path.'views/sweetmodal/jquery.sweet-modal.min.js');
+            $this->context->controller->addJS($this->_path.'views/sweetalert/sweetalert.min.js');
+            $this->context->controller->addJS($this->_path.'views/js/functions.js');
+            $this->context->controller->addJS($this->_path.'views/js/callmenu.js');
+        }
+    }
+
+    public function hookHeader()
+    {
+        $this->context->controller->addJS($this->_path.'/views/js/menu-front.js');
+        $this->context->controller->addJS($this->_path.'/views/js/jquery.nanoscroller.min.js');
+        $this->context->controller->addCSS($this->_path.'/views/css/front.css');
+    }
+
+    public function searchParentCategoryRecursive($id_category, $parent = 2)
+    {
+        if ($id_category == $parent) {
+            return $id_category;
+        }
+        $c = new Category($id_category, $this->current_lang, $this->id_shop);
+        if ($c->id_parent == $parent) {
+            return $c->id;
+        } else {
+            return $this->searchParentCategoryRecursive($c->id_parent, $parent);
+        }
+    } 
+
+    /**
+     * GetWidgetVariable WidgetInterface
+     *
+     * @param string $hookName
+     * @param array $configuration
+     * @return array
+     */
+    public function getWidgetVariables($hookName, array $configuration = [])
+    {
+        $id_lang = $this->current_lang;
+        $id_shop = $this->id_shop;
+        $items = $this->menu_model->getItems($id_lang, $id_shop, true);
+        $root     = Category::getRootCategory();
+        $id_root  = $root->id;
+
+        $items = $this->menu_model->getItems($id_lang, $id_shop, true);
+
+        $detect = new Mobile_Detect;
+        $widgetVariables = array(
+            'items' => $items,
+            'id_lang' => $id_lang,
+            'root_cat' => $id_root,
+            'is_mobile' => $detect->isMobile(),
+            'is_tablet' => $detect->isTablet(),
+            'helperMenu' => $this,
+            'langs' => $this->langs,
+            'root_link' => $this->context->link->getCategoryLink($root)
+        );
+
+        return $widgetVariables;
+    }
+
+    /**
+     * RenderWidget
+     *
+     * @param string $hookName
+     * @param array $configuration
+     * @return void
+     */
+    public function renderWidget($hookName, array $configuration = [])
+    {
+        $this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
+
+        return $this->fetch($this->templateFile);
+    }
+}
     
