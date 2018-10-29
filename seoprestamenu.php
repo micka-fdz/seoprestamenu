@@ -111,9 +111,11 @@ class Seoprestamenu extends Module implements WidgetInterface
                 $category_id = (int) $category_id['id_category'];
                 $lang_id = (int) $lang['id_lang'];
                 $category = new Category($category_id, $lang_id, $shop_id);
+                // dump(pSQL($category->name));
+                // die();
 
-                $model->url[$lang_id] = $this->context->link->getCategoryLink($category, null, $lang_id);
-                $model->label[$lang_id] = pSQL($category->name);
+                $menuModel->url[$lang_id] = $this->context->link->getCategoryLink($category, null, $lang_id);
+                $menuModel->label[$lang_id] = pSQL($category->name);
 
             }
             $menuModel->add();
