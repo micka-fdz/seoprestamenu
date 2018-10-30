@@ -39,7 +39,7 @@ class Seoprestamenu extends Module implements WidgetInterface
         $this->name = 'seoprestamenu';
         $this->tab = 'administration';
         $this->version = '1.0.0';
-        $this->author = 'SeoPresta.com';
+        $this->author = 'SeoPresta';
         $this->need_instance = 0;
         
         /**
@@ -106,17 +106,14 @@ class Seoprestamenu extends Module implements WidgetInterface
             $menuModel->id_parent = 0;
             $menuModel->target = '_self';
             $menuModel->id_shop = $shop_id;
+            $category_id = (int)$category_id['id_category'];
             foreach($langs as $lang)
             {
-                $category_id = (int) $category_id['id_category'];
-                $lang_id = (int) $lang['id_lang'];
-                $category = new Category($category_id, $lang_id, $shop_id);
-                // dump(pSQL($category->name));
-                // die();
-
+                $lang_id = (int)$lang['id_lang'];
+                $category = new Category($category_id, $lang_id, $shop_id);   
                 $menuModel->url[$lang_id] = $this->context->link->getCategoryLink($category, null, $lang_id);
                 $menuModel->label[$lang_id] = pSQL($category->name);
-
+                
             }
             $menuModel->add();
         }
@@ -171,7 +168,7 @@ class Seoprestamenu extends Module implements WidgetInterface
      * Load the configuration form
      */ 
     public function getContent()
-    {
+    { 
         if (((bool)Tools::isSubmit('submitSeoprestamenuModule')) == true) {
             $this->postProcess();
         }
