@@ -12,6 +12,7 @@ $_MODULE['<{seoprestamenu}prestashop>ajax_form_details_02a3a357710cc2a5dfdfb74ed
 $_MODULE['<{seoprestamenu}prestashop>ajax_form_details_c41a31890959544c6523af684561abe5'] = 'Cible';
 $_MODULE['<{seoprestamenu}prestashop>ajax_form_details_572898e06a331602937faebe89736b0b'] = 'Dans le même onglet';
 $_MODULE['<{seoprestamenu}prestashop>ajax_form_details_041a1d8d6f1063c9fea0271e4224b721'] = 'Dans un autre onglet';
+$_MODULE['<{seoprestamenu}prestashop>ajax_form_details_f55504fc467a2b7b921506b9fe40f710'] = 'Classe CSS';
 $_MODULE['<{seoprestamenu}prestashop>ajax_form_details_a6d9fdcd12e6c9101fcc0d3517dde2f7'] = 'Affichage en section (type mega menu)';
 $_MODULE['<{seoprestamenu}prestashop>ajax_form_details_06933067aafd48425d67bcb01bba5cb6'] = 'Sauvegarder';
 $_MODULE['<{seoprestamenu}prestashop>configure_6ed9fc80fb74e510479474d14cdd9187'] = 'Voulez vous supprimer le(e) élément(s)';
@@ -34,6 +35,8 @@ $_MODULE['<{seoprestamenu}prestashop>configure_54d555b5782f3e9e45091d7064f9a964'
 $_MODULE['<{seoprestamenu}prestashop>configure_c41a31890959544c6523af684561abe5'] = 'Cible';
 $_MODULE['<{seoprestamenu}prestashop>configure_572898e06a331602937faebe89736b0b'] = 'Dans le même onglet';
 $_MODULE['<{seoprestamenu}prestashop>configure_041a1d8d6f1063c9fea0271e4224b721'] = 'Dans un autre onglet';
+$_MODULE['<{seoprestamenu}prestashop>configure_f55504fc467a2b7b921506b9fe40f710'] = 'Classe CSS';
+$_MODULE['<{seoprestamenu}prestashop>configure_771b6e144110759e23e12c5c20107ef9'] = 'Classe CSS facultative';
 $_MODULE['<{seoprestamenu}prestashop>configure_068f80c7519d0528fb08e82137a72131'] = 'Produits';
 $_MODULE['<{seoprestamenu}prestashop>configure_08fce3fbcd5f653e92da81b1366ddf7c'] = 'Rechercher par nom...';
 $_MODULE['<{seoprestamenu}prestashop>configure_d304ba20e96d87411588eeabac850e34'] = 'Label';
@@ -41,7 +44,5 @@ $_MODULE['<{seoprestamenu}prestashop>configure_2a304a1348456ccd2234cd71a81bd338'
 $_MODULE['<{seoprestamenu}prestashop>configure_8a6659f67cb5dc1b775ab7b9a22fd9a1'] = 'Ajouter un produit au menu';
 $_MODULE['<{seoprestamenu}prestashop>configure_3a08e2e340ab29fd9263af48193cbf8e'] = 'Langues';
 $_MODULE['<{seoprestamenu}prestashop>configure_c8ddf0daeb972422159148fda3c3fa56'] = 'Supprimer le(s) élément(s)';
-$_MODULE['<{seoprestamenu}prestashop>configure_8524de963f07201e5c086830d370797f'] = 'Chargement...';
 $_MODULE['<{seoprestamenu}prestashop>configure_f692973556248ff9ef223e21fb42852a'] = 'Sauvegarder le menu';
 $_MODULE['<{seoprestamenu}prestashop>menu_1ff51c1fa6c2cb5e8feacad02e9a6fb1'] = 'Pas d\'éléments dans le menu';
-$_MODULE['<{seoprestamenu}prestashop>displaynavfullwidth_846495f9ceed11accf8879f555936a7d'] = 'Navigation';

@@ -135,9 +135,11 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
         $link = htmlspecialchars(Tools::getValue('link'));
         $label = htmlspecialchars(Tools::getValue('label'));
         $target = htmlspecialchars(Tools::getValue('target'));
+        $cssclass = htmlspecialchars(Tools::getValue('cssclass'));
         
         $module->menu_model->type       = "custom_link";
         $module->menu_model->target     = $target;
+        $module->menu_model->cssclass   = $cssclass;
         $module->menu_model->url_engine = false;
         $module->menu_model->id_parent  = 0;
         
@@ -223,10 +225,12 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
         // $link = htmlspecialchars(Tools::getValue('link'));
         $label = htmlspecialchars(Tools::getValue('label'));
         $target = htmlspecialchars(Tools::getValue('target'));
+        $cssclass = htmlspecialchars(Tools::getValue('cssclass'));
         $id_product = (int)Tools::getValue('id_product');
         
         $module->menu_model->type       = "product";
         $module->menu_model->target     = $target;
+        $module->menu_model->cssclass   = $cssclass;
         $module->menu_model->url_engine = false;
         $module->menu_model->id_parent  = 0;
         
@@ -378,7 +382,8 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
                                         $item->id_silo = (int)Tools::getValue('silo');
                                     }
                                     
-                                    $item->target           = pSQL((string)Tools::getValue('target'));
+                                    $item->target           = stripslashes(pSQL((string)Tools::getValue('target')));
+                                    $item->cssclass         = pSQL((string)Tools::getValue('cssclass'));
                                     $item->display_sections[$id_lang] = $display_sections;
                                     
                                     if ($item->save()) {

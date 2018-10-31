@@ -118,6 +118,12 @@
 									</select>
 								</div>
 
+								<!-- CSS class -->
+								<div class="form-group">
+									<label for="">{l s='CSS class' mod='seoprestamenu'}</label>
+									<input type="text" name="cssclass" placeholder="{l s='Optional CSS class' mod='seoprestamenu'}">
+								</div>
+
 								<button type="submit" class="btn btn-primary  pointer pull-right " name="addCustomLink" id="addCustomLink">{l s='Add item in menu' mod='seoprestamenu'}</button>
 								<div class="clearfix"></div>
 							</form>
@@ -156,6 +162,12 @@
 											<option value="_self">{l s='In the current tab' mod='seoprestamenu'}</option>
 											<option value="_blank">{l s='In other tab' mod='seoprestamenu'}</option>
 										</select>
+									</div>
+
+									<!-- CSS class -->
+									<div class="form-group">
+										<label for="">{l s='CSS class' mod='seoprestamenu'}</label>
+										<input type="text" name="cssclass" id="cssclass">
 									</div>
 
 									<button type="submit" class="btn btn-primary  pointer pull-right" name="addProductMenu" id="addProductMenu">{l s='Add product in menu' mod='seoprestamenu'}

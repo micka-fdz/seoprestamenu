@@ -30,6 +30,8 @@ class SeoprestamenuModel extends ObjectModel
     public $type;
 
     public $target;
+    
+    public $cssclass;
 
     public $url_engine;
 
@@ -61,6 +63,7 @@ class SeoprestamenuModel extends ObjectModel
         'fields' => array(
             'type'          => array('type' => self::TYPE_STRING,  'size' => 255, 'required' => true),
             'target'        => array('type' => self::TYPE_STRING),
+            'cssclass'        => array('type' => self::TYPE_STRING),
             'url_engine'    => array('type' => self::TYPE_BOOL),
 
             'id_parent'     => array('type' => self::TYPE_INT),
