@@ -382,7 +382,7 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
                                         $item->id_silo = (int)Tools::getValue('silo');
                                     }
                                     
-                                    $item->target           = stripslashes(pSQL((string)Tools::getValue('target')));
+                                    $item->target           = pSQL((string)Tools::getValue('target'));
                                     $item->cssclass         = pSQL((string)Tools::getValue('cssclass'));
                                     $item->display_sections[$id_lang] = $display_sections;
                                     
