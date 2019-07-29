@@ -31,6 +31,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'seoprestamenu_item` (
   `type` varchar(255) NOT NULL,
   `target` varchar(255) NOT NULL,
   `cssclass` varchar(255) NOT NULL,
+  `custom_parameter` varchar(1000) NOT NULL,
   `url_engine` tinyint(1) NOT NULL DEFAULT 0,
   `id_parent` int(11) NOT NULL DEFAULT 0,
   `id_silo` int(11) NOT NULL DEFAULT 0,

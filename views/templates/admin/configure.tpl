@@ -124,6 +124,12 @@
 									<input type="text" name="cssclass" placeholder="{l s='Optional CSS class' mod='seoprestamenu'}">
 								</div>
 
+								<!-- Custom parameter -->
+								<div class="form-group">
+									<label for="">{l s='Custom parameter' mod='seoprestamenu'}</label>
+									<input type="text" name="custom_parameter" placeholder="{l s='Optional Custom parameter' mod='seoprestamenu'}">
+								</div>
+
 								<button type="submit" class="btn btn-primary  pointer pull-right " name="addCustomLink" id="addCustomLink">{l s='Add item in menu' mod='seoprestamenu'}</button>
 								<div class="clearfix"></div>
 							</form>
@@ -168,6 +174,12 @@
 									<div class="form-group">
 										<label for="">{l s='CSS class' mod='seoprestamenu'}</label>
 										<input type="text" name="cssclass" id="cssclass">
+									</div>
+									
+									<!-- CSS class -->
+									<div class="form-group">
+										<label for="">{l s='Custom parameter' mod='seoprestamenu'}</label>
+										<input type="text" name="custom_parameter" id="custom_parameter">
 									</div>
 
 									<button type="submit" class="btn btn-primary  pointer pull-right" name="addProductMenu" id="addProductMenu">{l s='Add product in menu' mod='seoprestamenu'}
