@@ -135,9 +135,13 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
         $link = htmlspecialchars(Tools::getValue('link'));
         $label = htmlspecialchars(Tools::getValue('label'));
         $target = htmlspecialchars(Tools::getValue('target'));
+        $cssclass = htmlspecialchars(Tools::getValue('cssclass'));
+        $custom_parameter = htmlspecialchars(Tools::getValue('custom_parameter'));
         
         $module->menu_model->type       = "custom_link";
         $module->menu_model->target     = $target;
+        $module->menu_model->cssclass   = $cssclass;
+        $module->menu_model->custom_parameter   = $custom_parameter;
         $module->menu_model->url_engine = false;
         $module->menu_model->id_parent  = 0;
         
@@ -222,10 +226,14 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
         // $link = htmlspecialchars(Tools::getValue('link'));
         $label = htmlspecialchars(Tools::getValue('label'));
         $target = htmlspecialchars(Tools::getValue('target'));
+        $cssclass = htmlspecialchars(Tools::getValue('cssclass'));
+        $custom_parameter = htmlspecialchars(Tools::getValue('custom_parameter'));
         $id_product = (int)Tools::getValue('id_product');
         
         $module->menu_model->type       = "product";
         $module->menu_model->target     = $target;
+        $module->menu_model->cssclass   = $cssclass;
+        $module->menu_model->custom_parameter   = $custom_parameter;
         $module->menu_model->url_engine = false;
         $module->menu_model->id_parent  = 0;
         
@@ -378,6 +386,8 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
                                     }
                                     
                                     $item->target           = pSQL((string)Tools::getValue('target'));
+                                    $item->cssclass         = pSQL((string)Tools::getValue('cssclass'));
+                                    $item->custom_parameter = pSQL((string)Tools::getValue('custom_parameter'));
                                     $item->display_sections[$id_lang] = $display_sections;
                                     
                                     if ($item->save()) {

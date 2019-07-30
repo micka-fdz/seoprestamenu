@@ -12,6 +12,8 @@ $_MODULE['<{seoprestamenu}prestashop>ajax_form_details_02a3a357710cc2a5dfdfb74ed
 $_MODULE['<{seoprestamenu}prestashop>ajax_form_details_c41a31890959544c6523af684561abe5'] = 'Cible';
 $_MODULE['<{seoprestamenu}prestashop>ajax_form_details_572898e06a331602937faebe89736b0b'] = 'Dans le même onglet';
 $_MODULE['<{seoprestamenu}prestashop>ajax_form_details_041a1d8d6f1063c9fea0271e4224b721'] = 'Dans un autre onglet';
+$_MODULE['<{seoprestamenu}prestashop>ajax_form_details_f55504fc467a2b7b921506b9fe40f710'] = 'Classe CSS';
+$_MODULE['<{seoprestamenu}prestashop>ajax_form_details_479d772d2c00c99c9843474ad840ddc1'] = 'Paramètre custom';
 $_MODULE['<{seoprestamenu}prestashop>ajax_form_details_a6d9fdcd12e6c9101fcc0d3517dde2f7'] = 'Affichage en section (type mega menu)';
 $_MODULE['<{seoprestamenu}prestashop>ajax_form_details_06933067aafd48425d67bcb01bba5cb6'] = 'Sauvegarder';
 $_MODULE['<{seoprestamenu}prestashop>configure_6ed9fc80fb74e510479474d14cdd9187'] = 'Voulez vous supprimer le(e) élément(s)';
@@ -34,6 +36,10 @@ $_MODULE['<{seoprestamenu}prestashop>configure_54d555b5782f3e9e45091d7064f9a964'
 $_MODULE['<{seoprestamenu}prestashop>configure_c41a31890959544c6523af684561abe5'] = 'Cible';
 $_MODULE['<{seoprestamenu}prestashop>configure_572898e06a331602937faebe89736b0b'] = 'Dans le même onglet';
 $_MODULE['<{seoprestamenu}prestashop>configure_041a1d8d6f1063c9fea0271e4224b721'] = 'Dans un autre onglet';
+$_MODULE['<{seoprestamenu}prestashop>configure_f55504fc467a2b7b921506b9fe40f710'] = 'Classe CSS';
+$_MODULE['<{seoprestamenu}prestashop>configure_771b6e144110759e23e12c5c20107ef9'] = 'Classe CSS facultative';
+$_MODULE['<{seoprestamenu}prestashop>configure_479d772d2c00c99c9843474ad840ddc1'] = 'Paramètre custom';
+$_MODULE['<{seoprestamenu}prestashop>configure_888f17c0346eb2c7f6ca95c704637a96'] = 'Paramètre custom optionnel';
 $_MODULE['<{seoprestamenu}prestashop>configure_068f80c7519d0528fb08e82137a72131'] = 'Produits';
 $_MODULE['<{seoprestamenu}prestashop>configure_08fce3fbcd5f653e92da81b1366ddf7c'] = 'Rechercher par nom...';
 $_MODULE['<{seoprestamenu}prestashop>configure_d304ba20e96d87411588eeabac850e34'] = 'Label';

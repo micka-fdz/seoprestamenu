@@ -21,6 +21,14 @@
         <option value="_blank" {if isset($item->target) && $item->target == '_blank'} selected {/if} >{l s='In other tab' mod='seoprestamenu'}</option>
       </select>
     </div>
+    <div class="form-group sweet-modal-prompt">
+      <label for="">{l s='CSS class' mod='seoprestamenu'}</label>
+      <input type="text" class="form-control" name="cssclass" value="{if isset($item->cssclass)}{$item->cssclass}{/if}">
+    </div>
+    <div class="form-group sweet-modal-prompt">
+      <label for="">{l s='Custom parameter' mod='seoprestamenu'}</label>
+      <input type="text" class="form-control" name="custom_parameter" value="{if isset($item->custom_parameter)}{$item->custom_parameter}{/if}">
+    </div>
     {if $helperMenu->menu_model->getChilden($item->id,$id_lang)|count > 0}
     <div class="form-group sweet-modal-prompt">
       <label for="">{l s='Display in section' mod='seoprestamenu'}</label>

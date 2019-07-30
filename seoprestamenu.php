@@ -38,8 +38,8 @@ class Seoprestamenu extends Module implements WidgetInterface
     {
         $this->name = 'seoprestamenu';
         $this->tab = 'administration';
-        $this->version = '1.0.0';
-        $this->author = 'SeoPresta';
+        $this->version = '1.0.2';
+        $this->author = 'seopresta';
         $this->need_instance = 0;
         
         /**
@@ -67,22 +67,24 @@ class Seoprestamenu extends Module implements WidgetInterface
     }
     
     /**
-     * Don't forget to create update methods if needed:
-     * http://doc.prestashop.com/display/PS16/Enabling+the+Auto-Update
-     */
-    public function install()
-    {
-        Configuration::updateValue('SEOPRESTAMENU_LIVE_MODE', false);
-        include(dirname(__FILE__).'/sql/install.php');
-        $this->installDefaultCat(); 
-        if(Module::isInstalled('ps_mainmenu')){
-            Module::disableByName('ps_mainmenu');
-        }
-        return parent::install()      &&
-        $this->generateToken()        &&
-        $this->registerHook('header') &&
-        $this->registerHook('displayNavFullWidth') &&
-        $this->registerHook('backOfficeHeader');
+    * Don't forget to create update methods if needed:
+        * http://doc.prestashop.com/display/PS16/Enabling+the+Auto-Update
+        */
+        public function install()
+        {
+            Configuration::updateValue('SEOPRESTAMENU_LIVE_MODE', false);
+            include(dirname(__FILE__).'/sql/install.php');
+            $this->installDefaultCat(); 
+            if(Module::isInstalled('ps_mainmenu')){
+                Module::disableByName('ps_mainmenu');
+            }
+            return parent::install()          &&
+            $this->generateToken()        &&
+            $this->registerHook('header') &&
+            $this->registerHook('displayNavFullWidth') &&
+            $this->registerHook('backOfficeHeader') &&
+            $this->registerHook('displaySubmenuBefore') &&
+            $this->registerHook('displaySubmenuAfter');
     }
         
     /**
