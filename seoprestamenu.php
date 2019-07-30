@@ -38,7 +38,7 @@ class Seoprestamenu extends Module implements WidgetInterface
     {
         $this->name = 'seoprestamenu';
         $this->tab = 'administration';
-        $this->version = '1.0.1';
+        $this->version = '1.0.2';
         $this->author = 'seopresta';
         $this->need_instance = 0;
         
@@ -84,7 +84,9 @@ class Seoprestamenu extends Module implements WidgetInterface
             $this->generateToken()        &&
             $this->registerHook('header') &&
             $this->registerHook('displayNavFullWidth') &&
-            $this->registerHook('backOfficeHeader');
+            $this->registerHook('backOfficeHeader') &&
+            $this->registerHook('displaySubmenuBefore') &&
+            $this->registerHook('displaySubmenuAfter');
         }
         
         /**
