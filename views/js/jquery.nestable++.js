@@ -79,7 +79,7 @@ var prepareEdit = function () {
   currentEditName.html(target.data("name"));
   editButton.data("owner-id", target.data("id"));
 
-  console.log("[INFO] Editing Menu Item " + editButton.data("owner-id"));
+  // console.log("[INFO] Editing Menu Item " + editButton.data("owner-id"));
 
   menuEditor.fadeIn();
 };

@@ -202,10 +202,10 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
                 ];
             endforeach;
         }
-        $output = json_encode($output);
-        echo $output;
+
+        die(Tools::jsonEncode($output));
         
-        die();
+
     }
     
     
@@ -217,9 +217,8 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
         $id_product = (int)Tools::getValue('id_product');
         $product    = new Product($id_product, true, $module->current_lang);
         $product->custom_link = $link->getProductLink($product, $product->link_rewrite, $product->category, null, $module->current_lang);
-        echo json_encode($product);
-        
-        die();
+        die(Tools::jsonEncode($product));
+    
     }
     
     ##### Send product to menu
@@ -370,8 +369,8 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
                                         //   $json['content']['tab'.$l['id_lang']] = $module->displayAjaxForm($item,$l['id_lang']);
                                         // endforeach;
                                     }
-                                    echo json_encode($json);
-                                    die();
+                                    
+                                    die(Tools::jsonEncode($json));
                                 }
                                 
                                 if ($action == "updateItem") {
@@ -392,9 +391,9 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
                                     $item->display_sections[$id_lang] = $display_sections;
                                     
                                     if ($item->save()) {
-                                        echo json_encode(array('success' => true));
+                                        die(Tools::jsonEncode(array('success' => true)));
                                     } else {
-                                        echo json_encode(array('success' => false));
+                                        die(Tools::jsonEncode(array('success' => false)));
                                     }
                                     die();
                                 }
@@ -409,15 +408,14 @@ if (Tools::isSubmit('token') && Tools::getValue('token') == $goodToken) {
                                     $output['success']      = false;
                                     $output['type']         = 'danger';
                                     $output['message']      = $module->l('No action');
-                                    echo Tools::jsonEncode($output);
-                                    die();
+                                    die(Tools::jsonEncode($output));
                                 }
                             } else {
                                 $output                 = array();
                                 $output['success']      = false;
                                 $output['type']         = 'danger';
                                 $output['message']      = $module->l('Token error');
-                                echo Tools::jsonEncode($output);
-                                die();
+                                die(Tools::jsonEncode($output));
+
                             }
                             
