@@ -100,7 +100,7 @@
 								<!-- custom link -->
 								<div class="form-group">
 									<label for="">{l s='Your link' mod='seoprestamenu'}</label>
-									<input type="text" required name="link" placeholder="http:// or https://">
+									<input type="text" name="link" placeholder="http:// or https://">
 								</div>
 
 								<!-- label -->
