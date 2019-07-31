@@ -36,8 +36,8 @@ if (!defined('_PS_VERSION_')) {
 function upgrade_module_1_0_2($module)
 {
     $res = true;
-    $res &= $module->registerHook('displaySubmenuBefore');
-    $res &= $module->registerHook('displaySubmenuAfter');
+    $res &= $module->installHook('displaySubmenuBefore','','This hook is launched in seoprestamenu before displaying a submenu item');
+    $res &= $module->installHook('displaySubmenuAfter','','This hook is launched in seoprestamenu after displaying a submenu item');
 
     return $res;
 }
