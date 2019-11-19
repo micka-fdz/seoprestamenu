@@ -35,6 +35,5 @@
 						</div><!-- .sm-menu -->
 					<!-- end mobile menu -->
 					
-			</div><!-- end #navigation -->
 		</div><!-- end .row -->
 </div> <!-- .container -->
